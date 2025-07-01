@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  font-family: '微软雅黑', 'Noto Sans SC', ui-sans-serif, system-ui, sans-serif;
+  background-color: #F5F5F5;
+  color: #222;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  min-height: 100vh;
+  @apply bg-white text-black;
+}
+
+.dark body {
+  @apply bg-gray-900 text-gray-100;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.font-lobster {
+  font-family: 'Lobster', cursive;
+} 
