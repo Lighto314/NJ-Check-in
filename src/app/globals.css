@@ -47,4 +47,57 @@ body {
   input[type="text"], input[type="email"], input[type="password"] {
     font-size: 16px;
   }
+}
+
+/* 微信浏览器专用优化 */
+/* 微信 WebView 适配 */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  html, body {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* 微信浏览器视口优化 */
+@media screen and (max-width: 640px) {
+  html {
+    font-size: 16px;
+  }
+  
+  body {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  
+  /* 微信浏览器按钮优化 */
+  button {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+  }
+  
+  /* 微信浏览器输入框优化 */
+  input {
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    border-radius: 0;
+  }
+  
+  /* 微信浏览器滚动优化 */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* 微信浏览器字体优化 */
+@media screen and (max-width: 640px) {
+  .font-lobster {
+    font-family: 'Lobster', '微软雅黑', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  }
+  
+  body {
+    font-family: '微软雅黑', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  }
 } 

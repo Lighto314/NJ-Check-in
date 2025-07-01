@@ -90,31 +90,40 @@ export default function CheckinPage() {
   }
 
   return (
-    <main className="flex flex-col items-center min-h-screen bg-gray-900 px-2">
+    <main className="flex flex-col items-center min-h-screen bg-gray-900 px-2 py-4">
       <div className="w-full max-w-lg">
         {/* 顶部月份切换和重置按钮 */}
         <div className="grid grid-cols-3 items-center py-3 sm:py-4 w-full">
           <div className="flex justify-end">
-            <button className="text-white text-lg sm:text-xl px-2 sm:px-3 py-1 sm:py-1.5" onClick={() => changeMonth(-1)}>{t.prev}</button>
+            <button 
+              className="text-white text-base sm:text-lg px-2 sm:px-3 py-2 sm:py-1.5" 
+              onClick={() => changeMonth(-1)}
+              style={{minHeight: '36px', minWidth: '50px'}}
+            >{t.prev}</button>
           </div>
           <div className="flex justify-center">
-            <span className="text-lg sm:text-2xl font-bold text-white">{current.year}年{current.month}月</span>
+            <span className="text-base sm:text-xl font-bold text-white text-center">{current.year}年{current.month}月</span>
           </div>
           <div className="flex justify-start gap-1 sm:gap-2">
-            <button className="text-white text-lg sm:text-xl px-2 sm:px-3 py-1 sm:py-1.5" onClick={() => changeMonth(1)}>{t.next}</button>
+            <button 
+              className="text-white text-base sm:text-lg px-2 sm:px-3 py-2 sm:py-1.5" 
+              onClick={() => changeMonth(1)}
+              style={{minHeight: '36px', minWidth: '50px'}}
+            >{t.next}</button>
             <button
-              className="bg-red-600 text-white px-2 sm:px-4 py-1 sm:py-1.5 rounded text-sm sm:text-base hover:bg-red-700 ml-1 sm:ml-2"
+              className="bg-red-600 text-white px-2 sm:px-4 py-2 sm:py-1.5 rounded text-sm sm:text-base hover:bg-red-700 ml-1 sm:ml-2"
               onClick={() => {
                 if (window.confirm(t.confirmReset)) {
                   setData({ ...data, checkins: [], checkinCounts: {} })
                 }
               }}
+              style={{minHeight: '36px', minWidth: '60px'}}
             >{t.reset}</button>
           </div>
         </div>
         {/* 任务名展示 */}
         <div className="w-full flex justify-center mb-4 sm:mb-6">
-          <span className="font-lobster text-3xl sm:text-4xl md:text-5xl text-white text-center">{taskName}</span>
+          <span className="font-lobster text-2xl sm:text-3xl md:text-4xl text-white text-center leading-tight">{taskName}</span>
         </div>
         {/* 月历视图 */}
         <div className="w-full flex justify-center">

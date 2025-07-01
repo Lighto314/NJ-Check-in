@@ -87,43 +87,51 @@ export default function HomePage() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-gray-900 px-4">
+    <main className="min-h-screen flex flex-col items-center justify-center bg-gray-900 px-4 py-8">
       {/* 右上角语言切换 */}
       <div className="fixed top-4 right-4 z-20 flex gap-1 sm:gap-2">
         <button
           className={`px-2 py-1 rounded text-sm sm:text-lg ${lang === 'zh' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}
           onClick={() => setLang('zh')}
+          style={{minHeight: '32px', minWidth: '40px'}}
         >中文</button>
         <button
           className={`px-2 py-1 rounded text-sm sm:text-lg ${lang === 'en' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}
           onClick={() => setLang('en')}
+          style={{minHeight: '32px', minWidth: '40px'}}
         >EN</button>
       </div>
-      <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold text-white tracking-widest font-lobster w-full text-center mb-8 sm:mb-14">NJ の Check-in</h1>
-      <div className="w-full max-w-xl flex flex-col gap-4 sm:gap-8">
+      <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white tracking-wider font-lobster w-full text-center mb-6 sm:mb-12 leading-tight">NJ の Check-in</h1>
+      <div className="w-full max-w-xl flex flex-col gap-3 sm:gap-6">
         {tasks.map((task, idx) => (
           <div key={task.id} className="flex gap-2 sm:gap-4 items-center">
             <input
-              className="flex-1 px-3 py-3 sm:px-6 sm:py-4 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none text-lg sm:text-2xl"
+              className="flex-1 px-3 py-3 sm:px-6 sm:py-4 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none text-base sm:text-xl"
               placeholder={`${t.task}${idx + 1}`}
               value={task.name}
               onChange={e => updateTask(task.id, e.target.value)}
+              style={{minHeight: '44px'}}
             />
             <button
-              className="bg-blue-600 text-white px-3 py-3 sm:px-6 sm:py-4 rounded flex items-center justify-center text-lg sm:text-2xl whitespace-nowrap"
+              className="bg-blue-600 text-white px-3 py-3 sm:px-6 sm:py-4 rounded flex items-center justify-center text-base sm:text-xl whitespace-nowrap"
               onClick={() => goCheckin(task.id)}
+              style={{minHeight: '44px', minWidth: '60px'}}
             >{t.enter}</button>
             {idx >= 2 && (
               <button
-                className="ml-1 sm:ml-2 flex items-center justify-center text-2xl sm:text-3xl leading-none hover:bg-red-700 rounded w-10 h-10 sm:w-12 sm:h-12"
+                className="ml-1 sm:ml-2 flex items-center justify-center text-xl sm:text-2xl leading-none hover:bg-red-700 rounded"
                 onClick={() => deleteTask(task.id)}
                 title="删除任务"
-                style={{padding: 0}}
+                style={{padding: 0, minHeight: '44px', minWidth: '44px'}}
               >{t.delete}</button>
             )}
           </div>
         ))}
-        <button className="mt-4 sm:mt-6 bg-white text-gray-900 px-4 py-3 sm:px-6 sm:py-4 rounded text-lg sm:text-2xl" onClick={addTask}>{t.addTask}</button>
+        <button 
+          className="mt-4 sm:mt-6 bg-white text-gray-900 px-4 py-3 sm:px-6 sm:py-4 rounded text-base sm:text-xl" 
+          onClick={addTask}
+          style={{minHeight: '44px'}}
+        >{t.addTask}</button>
       </div>
     </main>
   )

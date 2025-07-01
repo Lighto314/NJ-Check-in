@@ -98,6 +98,7 @@ export default function Calendar({ year, month, checkins, onSelectDate, onLongPr
           onMouseLeave={handleMouseLeave}
           onTouchStart={() => handleTouchStart(dateStr)}
           onTouchEnd={handleTouchEnd}
+          style={{minHeight: '32px', minWidth: '32px'}}
         >
           {checked
             ? (
@@ -116,7 +117,7 @@ export default function Calendar({ year, month, checkins, onSelectDate, onLongPr
     <div className="grid grid-cols-7 gap-1 rounded-lg p-2 shadow w-full max-w-sm">
       {/* 星期标题 */}
       {WEEKDAYS.map(w => (
-        <div key={w} className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 text-center text-xs text-white">{w}</div>
+        <div key={w} className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 text-center text-xs text-white leading-none">{w}</div>
       ))}
       {renderDays()}
     </div>
