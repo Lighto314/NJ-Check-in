@@ -86,19 +86,21 @@ export default function Calendar({ year, month, checkins, onSelectDate, onLongPr
     for (let d of days) {
       const dateStr = formatDate(new Date(year, month - 1, d))
       const checked = checkins.includes(dateStr)
+      const isTodayDate = isToday(year, month, d)
       cells.push(
         <button
           key={dateStr}
           className={`w-8 h-8 sm:w-10 sm:h-10 flex flex-col items-center justify-center rounded-full mb-1 text-white
-            ${checked ? '' : isToday(year, month, d) ? 'border-2 border-primary' : ''}
+            ${checked ? '' : isTodayDate ? 'border-2 border-primary' : 'opacity-50 cursor-not-allowed'}
             `}
-          onClick={() => onLongPressDate && onLongPressDate(dateStr)}
-          onMouseDown={() => handleMouseDown(dateStr)}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseLeave}
-          onTouchStart={() => handleTouchStart(dateStr)}
-          onTouchEnd={handleTouchEnd}
+          onClick={isTodayDate ? (() => onLongPressDate && onLongPressDate(dateStr)) : undefined}
+          onMouseDown={isTodayDate ? (() => handleMouseDown(dateStr)) : undefined}
+          onMouseUp={isTodayDate ? handleMouseUp : undefined}
+          onMouseLeave={isTodayDate ? handleMouseLeave : undefined}
+          onTouchStart={isTodayDate ? (() => handleTouchStart(dateStr)) : undefined}
+          onTouchEnd={isTodayDate ? handleTouchEnd : undefined}
           style={{minHeight: '32px', minWidth: '32px'}}
+          disabled={!isTodayDate}
         >
           {checked
             ? (
