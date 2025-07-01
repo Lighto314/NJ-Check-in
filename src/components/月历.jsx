@@ -31,6 +31,16 @@ export default function Calendar({ year, month, checkins, onSelectDate, onLongPr
   const handleMouseLeave = () => {
     clearTimeout(longPressTimeout.current)
   }
+  
+  // 移动端触摸处理
+  const handleTouchStart = (dateStr) => {
+    longPressTimeout.current = setTimeout(() => {
+      if (onLongPressDate) onLongPressDate(dateStr)
+    }, 500)
+  }
+  const handleTouchEnd = () => {
+    clearTimeout(longPressTimeout.current)
+  }
 
   // 签到 emoji 列表
   const EMOJIS = [
@@ -79,23 +89,23 @@ export default function Calendar({ year, month, checkins, onSelectDate, onLongPr
       cells.push(
         <button
           key={dateStr}
-          className={`w-10 h-10 flex flex-col items-center justify-center rounded-full mb-1 text-white
+          className={`w-8 h-8 sm:w-10 sm:h-10 flex flex-col items-center justify-center rounded-full mb-1 text-white
             ${checked ? '' : isToday(year, month, d) ? 'border-2 border-primary' : ''}
             `}
           onClick={() => onLongPressDate && onLongPressDate(dateStr)}
-          onMouseDown={undefined}
-          onMouseUp={undefined}
-          onMouseLeave={undefined}
-          onTouchStart={undefined}
-          onTouchEnd={undefined}
+          onMouseDown={() => handleMouseDown(dateStr)}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
+          onTouchStart={() => handleTouchStart(dateStr)}
+          onTouchEnd={handleTouchEnd}
         >
           {checked
             ? (
-                <span style={{fontSize: '32px', display: 'inline-block', lineHeight: 1}}>
+                <span style={{fontSize: '24px', display: 'inline-block', lineHeight: 1}} className="sm:text-3xl">
                   {taskEmojis[(hashString(dateStr) + (checkinCounts[dateStr] || 1) - 1) % taskEmojis.length]}
                 </span>
               )
-            : d}
+            : <span className="text-sm sm:text-base">{d}</span>}
         </button>
       )
     }
@@ -103,10 +113,10 @@ export default function Calendar({ year, month, checkins, onSelectDate, onLongPr
   }
 
   return (
-    <div className="grid grid-cols-7 gap-1 rounded-lg p-2 shadow">
+    <div className="grid grid-cols-7 gap-1 rounded-lg p-2 shadow w-full max-w-sm">
       {/* 星期标题 */}
       {WEEKDAYS.map(w => (
-        <div key={w} className="flex items-center justify-center w-10 h-10 text-center text-xs text-white">{w}</div>
+        <div key={w} className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 text-center text-xs text-white">{w}</div>
       ))}
       {renderDays()}
     </div>

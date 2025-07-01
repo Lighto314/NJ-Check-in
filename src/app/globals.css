@@ -9,6 +9,10 @@ html, body {
   background-color: #F5F5F5;
   color: #222;
   -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 body {
@@ -26,4 +30,21 @@ body {
 
 .font-lobster {
   font-family: 'Lobster', cursive;
+}
+
+/* 移动端优化 */
+@media (max-width: 640px) {
+  input, button {
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+  
+  button:focus {
+    outline: none;
+  }
+  
+  /* 防止移动端缩放 */
+  input[type="text"], input[type="email"], input[type="password"] {
+    font-size: 16px;
+  }
 } 

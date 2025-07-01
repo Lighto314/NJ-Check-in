@@ -90,20 +90,20 @@ export default function CheckinPage() {
   }
 
   return (
-    <main className="flex flex-col items-center min-h-screen bg-gray-900">
-      <div className="w-full max-w-lg px-2">
+    <main className="flex flex-col items-center min-h-screen bg-gray-900 px-2">
+      <div className="w-full max-w-lg">
         {/* 顶部月份切换和重置按钮 */}
-        <div className="grid grid-cols-3 items-center py-4 w-full">
+        <div className="grid grid-cols-3 items-center py-3 sm:py-4 w-full">
           <div className="flex justify-end">
-            <button className="text-white text-xl px-3 py-1.5" onClick={() => changeMonth(-1)}>{t.prev}</button>
+            <button className="text-white text-lg sm:text-xl px-2 sm:px-3 py-1 sm:py-1.5" onClick={() => changeMonth(-1)}>{t.prev}</button>
           </div>
           <div className="flex justify-center">
-            <span className="text-2xl font-bold text-white">{current.year}年{current.month}月</span>
+            <span className="text-lg sm:text-2xl font-bold text-white">{current.year}年{current.month}月</span>
           </div>
-          <div className="flex justify-start gap-2">
-            <button className="text-white text-xl px-3 py-1.5" onClick={() => changeMonth(1)}>{t.next}</button>
+          <div className="flex justify-start gap-1 sm:gap-2">
+            <button className="text-white text-lg sm:text-xl px-2 sm:px-3 py-1 sm:py-1.5" onClick={() => changeMonth(1)}>{t.next}</button>
             <button
-              className="bg-red-600 text-white px-4 py-1.5 rounded text-base hover:bg-red-700 ml-2"
+              className="bg-red-600 text-white px-2 sm:px-4 py-1 sm:py-1.5 rounded text-sm sm:text-base hover:bg-red-700 ml-1 sm:ml-2"
               onClick={() => {
                 if (window.confirm(t.confirmReset)) {
                   setData({ ...data, checkins: [], checkinCounts: {} })
@@ -113,8 +113,8 @@ export default function CheckinPage() {
           </div>
         </div>
         {/* 任务名展示 */}
-        <div className="w-full flex justify-center mb-6">
-          <span className="font-lobster text-5xl text-white">{taskName}</span>
+        <div className="w-full flex justify-center mb-4 sm:mb-6">
+          <span className="font-lobster text-3xl sm:text-4xl md:text-5xl text-white text-center">{taskName}</span>
         </div>
         {/* 月历视图 */}
         <div className="w-full flex justify-center">
@@ -135,12 +135,12 @@ export default function CheckinPage() {
       </div>
       {/* 签到弹窗 */}
       {showCheckinModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 shadow-lg min-w-[220px] flex flex-col items-center">
-            <div className="mb-4 text-xl font-bold text-black">{t.checkin}</div>
-            <div className="mb-4 text-lg text-black">{t.date}{checkinDate}</div>
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-4 sm:p-6 shadow-lg w-full max-w-[280px] flex flex-col items-center">
+            <div className="mb-3 sm:mb-4 text-lg sm:text-xl font-bold text-black">{t.checkin}</div>
+            <div className="mb-3 sm:mb-4 text-base sm:text-lg text-black text-center">{t.date}{checkinDate}</div>
             <button
-              className="bg-gray-900 dark:bg-gray-900 bg-white border border-white text-white px-6 py-2 rounded mb-3 text-lg"
+              className="bg-gray-900 text-white px-4 sm:px-6 py-2 rounded mb-2 sm:mb-3 text-base sm:text-lg w-full"
               onClick={() => {
                 // 记录签到
                 let newCheckins = data.checkins
@@ -154,7 +154,7 @@ export default function CheckinPage() {
                 setShowCheckinModal(false)
               }}
             >{t.checkin}</button>
-            <button className="text-black text-base" onClick={() => setShowCheckinModal(false)}>{t.cancel}</button>
+            <button className="text-black text-sm sm:text-base" onClick={() => setShowCheckinModal(false)}>{t.cancel}</button>
           </div>
         </div>
       )}
