@@ -89,6 +89,13 @@ export default function CheckinPage() {
     setCurrent({ ...current, year, month })
   }
 
+  // 判断某日期是否为今天
+  const isTodayDate = (dateStr: string) => {
+    const today = getToday()
+    const todayStr = formatDate(today)
+    return dateStr === todayStr
+  }
+
   return (
     <main className="flex flex-col items-center min-h-screen bg-gray-900 px-2 py-4">
       <div className="w-full max-w-lg">
@@ -134,10 +141,18 @@ export default function CheckinPage() {
             checkinCounts={data.checkinCounts || {}}
             taskId={taskId}
             lang={lang}
-            onSelectDate={(date: string) => setSelectedDate(date)}
+            onSelectDate={(date: string) => {
+              // 只允许今天弹出任务详情弹窗
+              if (isTodayDate(date)) {
+                setSelectedDate(date)
+              }
+            }}
             onLongPressDate={(dateStr: string) => {
-              setCheckinDate(dateStr)
-              setShowCheckinModal(true)
+              // 只允许今天弹出签到弹窗
+              if (isTodayDate(dateStr)) {
+                setCheckinDate(dateStr)
+                setShowCheckinModal(true)
+              }
             }}
           />
         </div>
@@ -151,6 +166,11 @@ export default function CheckinPage() {
             <button
               className="bg-gray-900 text-white px-4 sm:px-6 py-2 rounded mb-2 sm:mb-3 text-base sm:text-lg w-full"
               onClick={() => {
+                // 再次校验，只允许今天签到
+                if (!isTodayDate(checkinDate)) {
+                  alert('只能签到今天！')
+                  return
+                }
                 // 记录签到
                 let newCheckins = data.checkins
                 if (!newCheckins.includes(checkinDate)) {
