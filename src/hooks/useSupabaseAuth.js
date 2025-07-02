@@ -14,9 +14,15 @@ export function useSupabaseAuth() {
   useEffect(() => {
     // 获取当前用户
     const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-      setLoading(false);
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        console.log('Current user:', user);
+        setUser(user);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error getting user:', error);
+        setLoading(false);
+      }
     };
 
     getUser();
@@ -24,6 +30,7 @@ export function useSupabaseAuth() {
     // 监听认证状态变化
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('Auth state change:', event, session?.user);
         setUser(session?.user ?? null);
         setLoading(false);
       }
@@ -35,6 +42,7 @@ export function useSupabaseAuth() {
   const signUp = async (username, password) => {
     try {
       setError(null);
+      setLoading(true);
       // 使用用户名作为邮箱（临时方案，后续可以改为真正的用户名系统）
       const email = `${username}@temp.com`;
       const { error } = await supabase.auth.signUp({
@@ -49,28 +57,43 @@ export function useSupabaseAuth() {
       if (error) throw error;
       
       // 注册成功后直接登录
-      const { error: signInError } = await supabase.auth.signInWithPassword({
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       if (signInError) throw signInError;
+      
+      // 手动设置用户状态
+      if (data.user) {
+        setUser(data.user);
+      }
+      setLoading(false);
     } catch (err) {
       setError(err.message);
+      setLoading(false);
     }
   };
 
   const signIn = async (username, password) => {
     try {
       setError(null);
+      setLoading(true);
       // 使用用户名作为邮箱（临时方案）
       const email = `${username}@temp.com`;
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       if (error) throw error;
+      
+      // 手动设置用户状态
+      if (data.user) {
+        setUser(data.user);
+      }
+      setLoading(false);
     } catch (err) {
       setError(err.message);
+      setLoading(false);
     }
   };
 
