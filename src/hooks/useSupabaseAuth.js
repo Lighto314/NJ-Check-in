@@ -47,6 +47,13 @@ export function useSupabaseAuth() {
         }
       });
       if (error) throw error;
+      
+      // 注册成功后直接登录
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (signInError) throw signInError;
     } catch (err) {
       setError(err.message);
     }

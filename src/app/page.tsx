@@ -34,7 +34,7 @@ export default function Home() {
       setMsg('登录成功！');
     } else {
       await signUp(username, password);
-      setMsg('注册成功！');
+      setMsg('注册成功！正在自动登录...');
     }
   };
 
