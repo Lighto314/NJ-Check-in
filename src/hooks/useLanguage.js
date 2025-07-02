@@ -39,6 +39,16 @@ const LANGS = {
     
     // 通用
     loadingText: '加载中...',
+    
+    // 404页面
+    pageNotFound: '页面未找到',
+    pageNotFoundDesc: '抱歉，您访问的页面不存在。',
+    backToHome: '返回首页',
+    
+    // 错误页面
+    somethingWentWrong: '出错了',
+    errorOccurred: '应用程序遇到了一个错误。',
+    tryAgain: '重试',
   },
   en: {
     // 登录页面
@@ -78,6 +88,16 @@ const LANGS = {
     
     // 通用
     loadingText: 'Loading...',
+    
+    // 404页面
+    pageNotFound: 'Page Not Found',
+    pageNotFoundDesc: 'Sorry, the page you are looking for does not exist.',
+    backToHome: 'Back to Home',
+    
+    // 错误页面
+    somethingWentWrong: 'Something Went Wrong',
+    errorOccurred: 'An error occurred in the application.',
+    tryAgain: 'Try Again',
   }
 };
 
