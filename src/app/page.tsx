@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSupabaseAuth } from '../hooks/useSupabaseAuth';
+import { useAuth } from '../hooks/useAuth';
 
 export default function Home() {
-  const { user, loading, error, signUp, signIn, signOut } = useSupabaseAuth();
+  const { user, loading, error, signUp, signIn, signOut } = useAuth();
   const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

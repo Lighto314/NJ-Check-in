@@ -2,23 +2,20 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSupabaseAuth } from '../../../hooks/useSupabaseAuth';
+import { useAuth } from '../../../hooks/useAuth';
 
 export default function DefaultCheckinPage() {
-  const { user, signOut } = useSupabaseAuth();
+  const { user, loading, signOut } = useAuth();
   const router = useRouter();
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
 
-  // 如果用户未登录，跳转到登录页面（只在首次加载后再判断）
+  // 如果用户未登录，跳转到登录页面
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const checked = window.localStorage.getItem('supabase-user');
-      if (!user && !checked) {
-        router.push('/');
-      }
+    if (!loading && !user) {
+      router.push('/');
     }
-  }, [user, router]);
+  }, [user, loading, router]);
 
   // 加载任务列表
   useEffect(() => {
