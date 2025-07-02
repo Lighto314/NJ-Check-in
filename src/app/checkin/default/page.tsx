@@ -53,6 +53,15 @@ export default function DefaultCheckinPage() {
     localStorage.setItem('checkin-tasks', JSON.stringify(updatedTasks));
   };
 
+  // 编辑任务
+  const editTask = (taskId, newName) => {
+    const updatedTasks = tasks.map(task => 
+      task.id === taskId ? { ...task, name: newName } : task
+    );
+    setTasks(updatedTasks);
+    localStorage.setItem('checkin-tasks', JSON.stringify(updatedTasks));
+  };
+
   // 进入任务打卡
   const enterTask = (taskId) => {
     router.push(`/checkin/${taskId}`);
@@ -89,7 +98,7 @@ export default function DefaultCheckinPage() {
             <input 
               className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none text-sm sm:text-base md:text-lg" 
               value={task.name}
-              readOnly
+              onChange={(e) => editTask(task.id, e.target.value)}
               style={{minHeight: '40px'}}
             />
             <button 
@@ -100,11 +109,12 @@ export default function DefaultCheckinPage() {
               进入签到
             </button>
             <button 
-              className="w-full max-w-[60px] bg-red-600 text-white px-2 py-2 sm:px-3 sm:py-3 rounded flex items-center justify-center text-sm sm:text-base md:text-lg whitespace-nowrap hover:bg-red-700"
+              className="w-full max-w-[40px] bg-red-600 text-white px-2 py-2 sm:px-2 sm:py-3 rounded flex items-center justify-center text-sm sm:text-base md:text-lg whitespace-nowrap hover:bg-red-700"
               onClick={() => deleteTask(task.id)}
               style={{minHeight: '40px', minWidth: '40px'}}
+              title="删除任务"
             >
-              删除
+              ❌
             </button>
           </div>
         ))}
