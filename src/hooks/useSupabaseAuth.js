@@ -32,12 +32,19 @@ export function useSupabaseAuth() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email, password) => {
+  const signUp = async (username, password) => {
     try {
       setError(null);
+      // 使用用户名作为邮箱（临时方案，后续可以改为真正的用户名系统）
+      const email = `${username}@temp.com`;
       const { error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            username: username
+          }
+        }
       });
       if (error) throw error;
     } catch (err) {
@@ -45,9 +52,11 @@ export function useSupabaseAuth() {
     }
   };
 
-  const signIn = async (email, password) => {
+  const signIn = async (username, password) => {
     try {
       setError(null);
+      // 使用用户名作为邮箱（临时方案）
+      const email = `${username}@temp.com`;
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
