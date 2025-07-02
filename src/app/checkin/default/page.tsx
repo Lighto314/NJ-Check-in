@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSupabaseAuth } from '../../hooks/useSupabaseAuth';
+import { useSupabaseAuth } from '../../../hooks/useSupabaseAuth';
 
 export default function DefaultCheckinPage() {
   const { user, signOut } = useSupabaseAuth();
