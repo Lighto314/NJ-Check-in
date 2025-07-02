@@ -72,14 +72,14 @@ export default function DefaultCheckinPage() {
   }
 
   return (
-    <main className="min-h-screen w-full max-w-md mx-auto flex flex-col items-center justify-center bg-gray-900 px-2 py-8">
+    <main className="min-h-screen w-full max-w-md mx-auto flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 to-blue-300 px-2 py-8">
       {/* 顶部用户信息和退出按钮 */}
       <div className="fixed top-4 right-4 z-20 flex gap-2">
-        <span className="text-white text-sm px-3 py-1 bg-blue-600 rounded">
+        <span className="text-gray-800 text-sm px-3 py-1 bg-white/30 backdrop-blur-sm rounded">
           {user.username || user.email}
         </span>
         <button 
-          className="px-3 py-1 rounded text-sm bg-red-600 text-white hover:bg-red-700"
+          className="px-3 py-1 rounded text-sm bg-red-500/80 backdrop-blur-sm text-white hover:bg-red-600/80"
           onClick={signOut}
         >
           退出
@@ -87,7 +87,7 @@ export default function DefaultCheckinPage() {
       </div>
 
       {/* 标题 */}
-      <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white tracking-wider font-lobster w-full text-center mb-4 sm:mb-8 leading-tight">
+      <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-gray-800 tracking-wider font-lobster w-full text-center mb-4 sm:mb-8 leading-tight">
         NJ の Check-in
       </h1>
 
@@ -96,20 +96,20 @@ export default function DefaultCheckinPage() {
         {tasks.map((task) => (
           <div key={task.id} className="flex gap-2 sm:gap-4 items-center">
             <input 
-              className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none text-sm sm:text-base md:text-lg" 
+              className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded bg-white/50 backdrop-blur-sm text-gray-800 border border-white/30 focus:outline-none focus:border-blue-400 text-sm sm:text-base md:text-lg" 
               value={task.name}
               onChange={(e) => editTask(task.id, e.target.value)}
               style={{minHeight: '40px'}}
             />
             <button 
-              className="w-full max-w-[100px] bg-blue-600 text-white px-2 py-2 sm:px-4 sm:py-3 rounded flex items-center justify-center text-sm sm:text-base md:text-lg whitespace-nowrap hover:bg-blue-700"
+              className="w-full max-w-[100px] bg-blue-600/80 backdrop-blur-sm text-white px-2 py-2 sm:px-4 sm:py-3 rounded flex items-center justify-center text-sm sm:text-base md:text-lg whitespace-nowrap hover:bg-blue-700/80"
               onClick={() => enterTask(task.id)}
               style={{minHeight: '40px', minWidth: '56px'}}
             >
               进入签到
             </button>
             <button 
-              className="w-full max-w-[40px] bg-red-600 text-white px-2 py-2 sm:px-2 sm:py-3 rounded flex items-center justify-center text-sm sm:text-base md:text-lg whitespace-nowrap hover:bg-red-700"
+              className="w-full max-w-[40px] bg-red-500/80 backdrop-blur-sm text-white px-2 py-2 sm:px-2 sm:py-3 rounded flex items-center justify-center text-sm sm:text-base md:text-lg whitespace-nowrap hover:bg-red-600/80"
               onClick={() => deleteTask(task.id)}
               style={{minHeight: '40px', minWidth: '40px'}}
               title="删除任务"
@@ -122,7 +122,7 @@ export default function DefaultCheckinPage() {
         {/* 添加新任务 */}
         <div className="flex gap-2 sm:gap-4 items-center">
           <input 
-            className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none text-sm sm:text-base md:text-lg" 
+            className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded bg-white/50 backdrop-blur-sm text-gray-800 border border-white/30 focus:outline-none focus:border-blue-400 text-sm sm:text-base md:text-lg" 
             placeholder="新任务名称"
             value={newTask}
             onChange={(e) => setNewTask(e.target.value)}
@@ -130,7 +130,7 @@ export default function DefaultCheckinPage() {
             style={{minHeight: '40px'}}
           />
           <button 
-            className="w-full max-w-[100px] bg-green-600 text-white px-2 py-2 sm:px-4 sm:py-3 rounded flex items-center justify-center text-sm sm:text-base md:text-lg whitespace-nowrap hover:bg-green-700"
+            className="w-full max-w-[100px] bg-green-600/80 backdrop-blur-sm text-white px-2 py-2 sm:px-4 sm:py-3 rounded flex items-center justify-center text-sm sm:text-base md:text-lg whitespace-nowrap hover:bg-green-700/80"
             onClick={addTask}
             style={{minHeight: '40px', minWidth: '56px'}}
           >
@@ -140,7 +140,7 @@ export default function DefaultCheckinPage() {
       </div>
 
       {/* 欢迎信息 */}
-      <div className="mt-6 text-center text-gray-400 text-sm">
+      <div className="mt-6 text-center text-gray-700 text-sm">
         <p>欢迎回来，{user.username || user.email}！</p>
         <p className="mt-2">创建任务开始你的打卡之旅吧！</p>
       </div>
