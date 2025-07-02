@@ -7,6 +7,7 @@ import TaskList from '../../../components/任务列表'
 import 礼炮动画 from '../../../components/礼炮动画'
 import useLocalStorage from '../../../hooks/useLocalStorage'
 import { getMonthDays, formatDate, getToday } from '../../../utils/日期工具'
+import { useLanguage } from '../../../hooks/useLanguage'
 
 const LANGS = {
   zh: {
@@ -31,6 +32,7 @@ const LANGS = {
 
 export default function CheckinPage() {
   const { taskId } = useParams()
+  const { lang, changeLang, t } = useLanguage()
   // 当前显示的年月
   const [current, setCurrent] = useState(() => {
     const today = getToday()
@@ -44,8 +46,6 @@ export default function CheckinPage() {
   const [showCheckinModal, setShowCheckinModal] = useState(false)
   const [checkinDate, setCheckinDate] = useState<string | null>(null)
   const [taskName, setTaskName] = useState('')
-  // 语言切换
-  const [lang, setLang] = useState('zh')
   // 礼炮动画状态
   const [showConfetti, setShowConfetti] = useState(false)
 
@@ -62,13 +62,7 @@ export default function CheckinPage() {
     }
   }, [taskId])
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setLang(localStorage.getItem('checkin-lang') || 'zh')
-    }
-  }, [])
-
-  const t = LANGS[lang]
+  // 移除旧的语言切换逻辑，使用 useLanguage hook
 
   // 计算连续签到天数
   const calcStreak = () => {
@@ -101,6 +95,22 @@ export default function CheckinPage() {
 
   return (
     <main className="flex flex-col items-center min-h-screen bg-gray-900 px-2 py-4">
+      {/* 语言切换按钮 */}
+      <div className="fixed top-4 left-4 z-20 flex gap-2">
+        <button 
+          className={`px-3 py-1 rounded text-sm ${lang === 'zh' ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-700'}`}
+          onClick={() => changeLang('zh')}
+        >
+          中文
+        </button>
+        <button 
+          className={`px-3 py-1 rounded text-sm ${lang === 'en' ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-700'}`}
+          onClick={() => changeLang('en')}
+        >
+          EN
+        </button>
+      </div>
+      
       <div className="w-full max-w-lg">
         {/* 顶部月份切换和重置按钮 */}
         <div className="grid grid-cols-3 items-center py-3 sm:py-4 w-full">
@@ -171,7 +181,7 @@ export default function CheckinPage() {
               onClick={() => {
                 // 再次校验，只允许今天签到
                 if (!isTodayDate(checkinDate)) {
-                  alert('只能签到今天！')
+                  alert(t('onlyToday'))
                   return
                 }
                 // 记录签到

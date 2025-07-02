@@ -3,9 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../hooks/useAuth';
+import { useLanguage } from '../hooks/useLanguage';
 
 export default function Home() {
   const { user, loading, error, signUp, signIn, signOut } = useAuth();
+  const { lang, changeLang, t } = useLanguage();
   const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -25,16 +27,16 @@ export default function Home() {
     setMsg('');
     
     if (!isLogin && password !== confirmPassword) {
-      setMsg('两次输入的密码不一致！');
+      setMsg(t('passwordMismatch'));
       return;
     }
     
     if (isLogin) {
       await signIn(username, password);
-      setMsg('登录成功！');
+      setMsg(t('loginSuccess'));
     } else {
       await signUp(username, password);
-      setMsg('注册成功！正在自动登录...');
+      setMsg(t('registerSuccess'));
     }
   };
 
@@ -43,7 +45,7 @@ export default function Home() {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300">
         <div className="text-lg text-gray-700 bg-white/80 px-6 py-4 rounded-lg">
-          正在检查登录状态...
+          {t('checkingAuth')}
         </div>
       </div>
     );
@@ -54,7 +56,7 @@ export default function Home() {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300">
         <div className="text-lg text-gray-700 bg-white/80 px-6 py-4 rounded-lg">
-          正在跳转到打卡界面...
+          {t('redirecting')}
         </div>
       </div>
     );
@@ -62,13 +64,29 @@ export default function Home() {
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300">
+      {/* 语言切换按钮 */}
+      <div className="fixed top-4 right-4 z-20 flex gap-2">
+        <button 
+          className={`px-3 py-1 rounded text-sm ${lang === 'zh' ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-700'}`}
+          onClick={() => changeLang('zh')}
+        >
+          中文
+        </button>
+        <button 
+          className={`px-3 py-1 rounded text-sm ${lang === 'en' ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-700'}`}
+          onClick={() => changeLang('en')}
+        >
+          EN
+        </button>
+      </div>
+      
       <div className="bg-white/30 backdrop-blur-sm rounded-xl shadow-lg p-8 w-full max-w-xs flex flex-col items-center">
-        <div className="text-3xl font-bold mb-6 text-white">NJ Check-in</div>
+        <div className="text-3xl font-bold mb-6 text-white">{t('title')}</div>
           <form className="w-full flex flex-col gap-3" onSubmit={handleSubmit} autoComplete="on">
             <input
               type="text"
               name="username"
-              placeholder="用户名"
+              placeholder={t('username')}
               className="border rounded px-3 py-2 w-full bg-white/50 text-gray-800 placeholder-gray-600"
               value={username}
               onChange={e => setUsername(e.target.value)}
@@ -78,7 +96,7 @@ export default function Home() {
             <input
               type="password"
               name="password"
-              placeholder="密码"
+              placeholder={t('password')}
               className="border rounded px-3 py-2 w-full bg-white/50 text-gray-800 placeholder-gray-600"
               value={password}
               onChange={e => setPassword(e.target.value)}
@@ -89,7 +107,7 @@ export default function Home() {
               <input
                 type="password"
                 name="confirmPassword"
-                placeholder="确认密码"
+                placeholder={t('confirmPassword')}
                 className="border rounded px-3 py-2 w-full bg-white/50 text-gray-800 placeholder-gray-600"
                 value={confirmPassword}
                 onChange={e => setConfirmPassword(e.target.value)}
@@ -100,7 +118,7 @@ export default function Home() {
             <button
               type="submit"
               className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-            >{isLogin ? '登录' : '注册'}</button>
+            >{isLogin ? t('login') : t('register')}</button>
             <button
               type="button"
               className="w-full text-white underline text-sm mt-1"
@@ -109,7 +127,7 @@ export default function Home() {
                 setConfirmPassword('');
                 setMsg('');
               }}
-            >{isLogin ? '没有账号？注册' : '已有账号？登录'}</button>
+            >{isLogin ? t('noAccount') : t('hasAccount')}</button>
             {error && <div className="text-red-300 text-sm mt-1">{error}</div>}
             {msg && <div className="text-green-300 text-sm mt-1">{msg}</div>}
           </form>

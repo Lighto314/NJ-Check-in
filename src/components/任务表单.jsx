@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { PRIORITY_OPTIONS } from '../utils/日期工具'
+import { useLanguage } from '../hooks/useLanguage'
 
 /**
  * 任务表单组件
@@ -8,13 +9,14 @@ import { PRIORITY_OPTIONS } from '../utils/日期工具'
  * @param {function} onCancel 取消回调
  */
 export default function TaskForm({ task, onSave, onCancel }) {
+  const { lang, t } = useLanguage()
   const [title, setTitle] = useState(task?.title || '')
   const [priority, setPriority] = useState(task?.priority || '中')
 
   // 保存任务
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (!title.trim()) return alert('请输入任务标题')
+    if (!title.trim()) return alert(lang === 'en' ? 'Please enter task title' : '请输入任务标题')
     onSave({
       id: task?.id || Date.now().toString(),
       title,
@@ -27,7 +29,7 @@ export default function TaskForm({ task, onSave, onCancel }) {
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
       <form className="bg-white rounded-lg p-4 w-80" onSubmit={handleSubmit}>
         <div className="mb-2">
-          <label className="block mb-1">任务标题</label>
+          <label className="block mb-1">{lang === 'en' ? 'Task Title' : '任务标题'}</label>
           <input
             className="w-full border rounded px-2 py-1"
             value={title}
@@ -37,7 +39,7 @@ export default function TaskForm({ task, onSave, onCancel }) {
           />
         </div>
         <div className="mb-2">
-          <label className="block mb-1">优先级</label>
+          <label className="block mb-1">{lang === 'en' ? 'Priority' : '优先级'}</label>
           <select
             className="w-full border rounded px-2 py-1"
             value={priority}
@@ -49,8 +51,8 @@ export default function TaskForm({ task, onSave, onCancel }) {
           </select>
         </div>
         <div className="flex justify-end gap-2 mt-4">
-          <button type="button" className="text-gray-500" onClick={onCancel}>取消</button>
-          <button type="submit" className="bg-primary text-white px-4 py-1 rounded">保存</button>
+          <button type="button" className="text-gray-500" onClick={onCancel}>{t('cancel')}</button>
+          <button type="submit" className="bg-primary text-white px-4 py-1 rounded">{lang === 'en' ? 'Save' : '保存'}</button>
         </div>
       </form>
     </div>

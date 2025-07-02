@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import TaskForm from './任务表单'
 import { PRIORITY_COLORS } from '../utils/日期工具'
+import { useLanguage } from '../hooks/useLanguage'
 
 /**
  * 任务列表组件
@@ -10,6 +11,7 @@ import { PRIORITY_COLORS } from '../utils/日期工具'
  * @param {function} onClose 关闭弹窗
  */
 export default function TaskList({ date, data, setData, onClose }) {
+  const { lang, t } = useLanguage()
   const [showForm, setShowForm] = useState(false)
   const [editTask, setEditTask] = useState(null)
   const tasks = data.tasks?.[date] || []
@@ -57,13 +59,13 @@ export default function TaskList({ date, data, setData, onClose }) {
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-end z-50">
       <div className="bg-white w-full rounded-t-2xl p-4 max-h-[80vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-2">
-          <div className="font-bold">{date} 的任务</div>
-          <button className="text-primary" onClick={onClose}>关闭</button>
+          <div className="font-bold">{date} {lang === 'en' ? 'Tasks' : '的任务'}</div>
+          <button className="text-primary" onClick={onClose}>{t('cancel')}</button>
         </div>
-        <button className="bg-primary text-white px-3 py-1 rounded mb-2" onClick={() => { setShowForm(true); setEditTask(null) }}>添加任务</button>
+        <button className="bg-primary text-white px-3 py-1 rounded mb-2" onClick={() => { setShowForm(true); setEditTask(null) }}>{lang === 'en' ? 'Add Task' : '添加任务'}</button>
         {/* 任务列表 */}
         <ul>
-          {tasks.length === 0 && <li className="text-gray-400">暂无任务</li>}
+          {tasks.length === 0 && <li className="text-gray-400">{lang === 'en' ? 'No tasks' : '暂无任务'}</li>}
           {tasks.map(task => (
             <li key={task.id} className="flex items-center justify-between mb-1 p-2 rounded" style={{ background: task.done ? '#E8F5E9' : '#F5F5F5' }}>
               <div className="flex items-center gap-2">
@@ -71,9 +73,9 @@ export default function TaskList({ date, data, setData, onClose }) {
                 <span className={task.done ? 'line-through text-green' : ''}>{task.title}</span>
               </div>
               <div className="flex gap-1">
-                <button className="text-green" onClick={() => toggleDone(task.id)}>{task.done ? '撤销' : '完成'}</button>
-                <button className="text-primary" onClick={() => { setEditTask(task); setShowForm(true) }}>编辑</button>
-                <button className="text-red" onClick={() => handleDelete(task.id)}>删除</button>
+                <button className="text-green" onClick={() => toggleDone(task.id)}>{task.done ? (lang === 'en' ? 'Undo' : '撤销') : (lang === 'en' ? 'Done' : '完成')}</button>
+                <button className="text-primary" onClick={() => { setEditTask(task); setShowForm(true) }}>{lang === 'en' ? 'Edit' : '编辑'}</button>
+                <button className="text-red" onClick={() => handleDelete(task.id)}>{t('delete')}</button>
               </div>
             </li>
           ))}

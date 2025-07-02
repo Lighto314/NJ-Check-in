@@ -3,9 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../../hooks/useAuth';
+import { useLanguage } from '../../../hooks/useLanguage';
 
 export default function DefaultCheckinPage() {
   const { user, loading, signOut } = useAuth();
+  const { lang, changeLang, t } = useLanguage();
   const router = useRouter();
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
@@ -68,7 +70,7 @@ export default function DefaultCheckinPage() {
   };
 
   if (!user) {
-    return <div className="flex items-center justify-center min-h-screen">加载中...</div>;
+    return <div className="flex items-center justify-center min-h-screen">{t('loadingText')}</div>;
   }
 
   return (
@@ -82,7 +84,23 @@ export default function DefaultCheckinPage() {
           className="px-3 py-1 rounded text-sm bg-red-600 text-white hover:bg-red-700"
           onClick={signOut}
         >
-          退出
+          {t('logout')}
+        </button>
+      </div>
+      
+      {/* 语言切换按钮 */}
+      <div className="fixed top-4 left-4 z-20 flex gap-2">
+        <button 
+          className={`px-3 py-1 rounded text-sm ${lang === 'zh' ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-700'}`}
+          onClick={() => changeLang('zh')}
+        >
+          中文
+        </button>
+        <button 
+          className={`px-3 py-1 rounded text-sm ${lang === 'en' ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-700'}`}
+          onClick={() => changeLang('en')}
+        >
+          EN
         </button>
       </div>
 
@@ -106,13 +124,13 @@ export default function DefaultCheckinPage() {
               onClick={() => enterTask(task.id)}
               style={{minHeight: '40px', minWidth: '56px'}}
             >
-              进入签到
+              {t('enterCheckin')}
             </button>
             <button 
               className="w-full max-w-[40px] bg-red-600 text-white px-2 py-2 sm:px-2 sm:py-3 rounded flex items-center justify-center text-sm sm:text-base md:text-lg whitespace-nowrap hover:bg-red-700"
               onClick={() => deleteTask(task.id)}
               style={{minHeight: '40px', minWidth: '40px'}}
-              title="删除任务"
+              title={t('delete')}
             >
               ❌
             </button>
@@ -123,7 +141,7 @@ export default function DefaultCheckinPage() {
         <div className="flex gap-2 sm:gap-4 items-center">
           <input 
             className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none text-sm sm:text-base md:text-lg" 
-            placeholder="新任务名称"
+            placeholder={t('newTask')}
             value={newTask}
             onChange={(e) => setNewTask(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && addTask()}
@@ -134,15 +152,15 @@ export default function DefaultCheckinPage() {
             onClick={addTask}
             style={{minHeight: '40px', minWidth: '56px'}}
           >
-            添加
+            {t('add')}
           </button>
         </div>
       </div>
 
       {/* 欢迎信息 */}
       <div className="mt-6 text-center text-gray-400 text-sm">
-        <p>欢迎回来，{user.username || user.email}！</p>
-        <p className="mt-2">创建任务开始你的打卡之旅吧！</p>
+        <p>{t('welcome')}{user.username || user.email}！</p>
+        <p className="mt-2">{t('welcomeSubtitle')}</p>
       </div>
     </main>
   );
