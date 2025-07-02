@@ -6,6 +6,9 @@ const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+// 测试 Supabase 连接
+console.log('Supabase client initialized with URL:', supabaseUrl);
+
 export function useSupabaseAuth() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,8 +18,9 @@ export function useSupabaseAuth() {
     // 获取当前用户
     const getUser = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        console.log('Current user:', user);
+        console.log('Checking user session...');
+        const { data: { user }, error } = await supabase.auth.getUser();
+        console.log('Current user:', user, 'Error:', error);
         setUser(user);
         setLoading(false);
       } catch (error) {
@@ -24,6 +28,12 @@ export function useSupabaseAuth() {
         setLoading(false);
       }
     };
+
+    // 设置一个超时，防止无限加载
+    const timeout = setTimeout(() => {
+      console.log('Auth check timeout, setting loading to false');
+      setLoading(false);
+    }, 5000);
 
     getUser();
 
@@ -33,10 +43,14 @@ export function useSupabaseAuth() {
         console.log('Auth state change:', event, session?.user);
         setUser(session?.user ?? null);
         setLoading(false);
+        clearTimeout(timeout);
       }
     );
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(timeout);
+    };
   }, []);
 
   const signUp = async (username, password) => {

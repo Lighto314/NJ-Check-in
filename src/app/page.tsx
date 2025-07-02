@@ -38,12 +38,23 @@ export default function Home() {
     }
   };
 
-  // 如果正在加载或用户已登录，显示加载状态
-  if (loading || user) {
+  // 如果正在加载，显示加载状态
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300">
         <div className="text-lg text-gray-700 bg-white/80 px-6 py-4 rounded-lg">
-          {loading ? '加载中...' : '正在跳转...'}
+          正在检查登录状态...
+        </div>
+      </div>
+    );
+  }
+
+  // 如果用户已登录，显示跳转状态
+  if (user) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300">
+        <div className="text-lg text-gray-700 bg-white/80 px-6 py-4 rounded-lg">
+          正在跳转到打卡界面...
         </div>
       </div>
     );
