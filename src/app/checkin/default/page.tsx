@@ -10,10 +10,13 @@ export default function DefaultCheckinPage() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
 
-  // 如果用户未登录，跳转到登录页面
+  // 如果用户未登录，跳转到登录页面（只在首次加载后再判断）
   useEffect(() => {
-    if (!user) {
-      router.push('/');
+    if (typeof window !== 'undefined') {
+      const checked = window.localStorage.getItem('supabase-user');
+      if (!user && !checked) {
+        router.push('/');
+      }
     }
   }, [user, router]);
 

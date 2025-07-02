@@ -14,6 +14,20 @@ export function useSupabaseAuth() {
   const [loading, setLoading] = useState(false); // 改为 false，避免初始加载
   const [error, setError] = useState(null);
 
+  // 从本地存储恢复用户状态
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedUser = localStorage.getItem('supabase-user');
+      if (savedUser) {
+        try {
+          setUser(JSON.parse(savedUser));
+        } catch (error) {
+          console.error('Error parsing saved user:', error);
+        }
+      }
+    }
+  }, []);
+
   useEffect(() => {
     // 设置一个超时，防止无限加载
     const timeout = setTimeout(() => {
@@ -84,6 +98,8 @@ export function useSupabaseAuth() {
       // 手动设置用户状态
       if (data.user) {
         setUser(data.user);
+        // 保存到本地存储
+        localStorage.setItem('supabase-user', JSON.stringify(data.user));
       }
       setLoading(false);
     } catch (err) {
@@ -107,6 +123,8 @@ export function useSupabaseAuth() {
       // 手动设置用户状态
       if (data.user) {
         setUser(data.user);
+        // 保存到本地存储
+        localStorage.setItem('supabase-user', JSON.stringify(data.user));
       }
       setLoading(false);
     } catch (err) {
@@ -118,6 +136,8 @@ export function useSupabaseAuth() {
   const signOut = async () => {
     try {
       setError(null);
+      localStorage.removeItem('supabase-user'); // 退出时清除本地用户
+      setUser(null);
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
     } catch (err) {
