@@ -7,12 +7,19 @@ export default function Home() {
   const { user, loading, error, signUp, signIn, signOut } = useSupabaseAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);
   const [msg, setMsg] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMsg('');
+    
+    if (!isLogin && password !== confirmPassword) {
+      setMsg('两次输入的密码不一致！');
+      return;
+    }
+    
     if (isLogin) {
       await signIn(username, password);
       setMsg('登录成功！');
@@ -55,6 +62,16 @@ export default function Home() {
               onChange={e => setPassword(e.target.value)}
               required
             />
+            {!isLogin && (
+              <input
+                type="password"
+                placeholder="确认密码"
+                className="border rounded px-3 py-2 w-full bg-white/50 text-gray-800 placeholder-gray-600"
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
+                required
+              />
+            )}
             <button
               type="submit"
               className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
@@ -62,7 +79,11 @@ export default function Home() {
             <button
               type="button"
               className="w-full text-white underline text-sm mt-1"
-              onClick={() => setIsLogin(!isLogin)}
+              onClick={() => {
+                setIsLogin(!isLogin);
+                setConfirmPassword('');
+                setMsg('');
+              }}
             >{isLogin ? '没有账号？注册' : '已有账号？登录'}</button>
             {error && <div className="text-red-300 text-sm mt-1">{error}</div>}
             {msg && <div className="text-green-300 text-sm mt-1">{msg}</div>}
