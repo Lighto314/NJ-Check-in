@@ -1,15 +1,24 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useSupabaseAuth } from '../hooks/useSupabaseAuth';
 
 export default function Home() {
   const { user, loading, error, signUp, signIn, signOut } = useSupabaseAuth();
+  const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);
   const [msg, setMsg] = useState('');
+
+  // 用户登录成功后自动跳转到打卡界面
+  useEffect(() => {
+    if (user) {
+      router.push('/checkin/default');
+    }
+  }, [user, router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,30 +54,36 @@ export default function Home() {
             <div className="text-white/80 text-sm">登录后可进行打卡和数据云同步</div>
           </>
         ) : (
-          <form className="w-full flex flex-col gap-3" onSubmit={handleSubmit}>
+          <form className="w-full flex flex-col gap-3" onSubmit={handleSubmit} autoComplete="on">
             <input
               type="text"
+              name="username"
               placeholder="用户名"
               className="border rounded px-3 py-2 w-full bg-white/50 text-gray-800 placeholder-gray-600"
               value={username}
               onChange={e => setUsername(e.target.value)}
+              autoComplete="username"
               required
             />
             <input
               type="password"
+              name="password"
               placeholder="密码"
               className="border rounded px-3 py-2 w-full bg-white/50 text-gray-800 placeholder-gray-600"
               value={password}
               onChange={e => setPassword(e.target.value)}
+              autoComplete={isLogin ? "current-password" : "new-password"}
               required
             />
             {!isLogin && (
               <input
                 type="password"
+                name="confirmPassword"
                 placeholder="确认密码"
                 className="border rounded px-3 py-2 w-full bg-white/50 text-gray-800 placeholder-gray-600"
                 value={confirmPassword}
                 onChange={e => setConfirmPassword(e.target.value)}
+                autoComplete="new-password"
                 required
               />
             )}
