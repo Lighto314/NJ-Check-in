@@ -11,10 +11,16 @@ console.log('Supabase client initialized with URL:', supabaseUrl);
 
 export function useSupabaseAuth() {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // 改为 false，避免初始加载
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // 暂时跳过 Supabase 认证检查，直接显示登录页面
+    console.log('Skipping initial auth check for now');
+    setLoading(false);
+    
+    // 注释掉 Supabase 认证检查，避免连接问题
+    /*
     // 获取当前用户
     const getUser = async () => {
       try {
@@ -51,6 +57,7 @@ export function useSupabaseAuth() {
       subscription.unsubscribe();
       clearTimeout(timeout);
     };
+    */
   }, []);
 
   const signUp = async (username, password) => {
