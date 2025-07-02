@@ -1,138 +1,72 @@
-// @ts-nocheck
-'use client'
-import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import React, { useState } from 'react';
+import { useSupabaseAuth } from '../hooks/useSupabaseAuth';
 
-const TASKS_KEY = 'checkin-tasks'
-const LANG_KEY = 'checkin-lang'
-const LANGS = {
-  zh: {
-    headline: 'NJ の Check-in',
-    task: '任务',
-    addTask: '+ 添加任务',
-    enter: '进入签到',
-    inputTip: '请输入任务名称',
-    delete: '❌',
-  },
-  en: {
-    headline: 'NJ Check-in',
-    task: 'Task',
-    addTask: '+ Add Task',
-    enter: 'Check In',
-    inputTip: 'Please enter task name',
-    delete: '❌',
-  }
-}
+export default function Home() {
+  const { user, loading, error, signUp, signIn, signOut } = useSupabaseAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLogin, setIsLogin] = useState(true);
+  const [msg, setMsg] = useState('');
 
-export default function HomePage() {
-  // 初始化时从 localStorage 读取任务
-  const [tasks, setTasks] = useState(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem(TASKS_KEY)
-        if (saved) return JSON.parse(saved)
-      } catch {}
-    }
-    return [
-      { id: 1, name: '' },
-      { id: 2, name: '' }
-    ]
-  })
-  const router = useRouter()
-
-  // 每次 tasks 变化时保存到 localStorage
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(TASKS_KEY, JSON.stringify(tasks))
-    }
-  }, [tasks])
-
-  // 语言切换
-  const [lang, setLang] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem(LANG_KEY) || 'zh'
-    }
-    return 'zh'
-  })
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(LANG_KEY, lang)
-    }
-  }, [lang])
-  const t = LANGS[lang]
-
-  // 添加新任务
-  const addTask = () => {
-    setTasks([...tasks, { id: Date.now(), name: '' }])
-  }
-
-  // 修改任务名
-  const updateTask = (id, name) => {
-    setTasks(tasks.map(t => t.id === id ? { ...t, name } : t))
-  }
-
-  // 进入签到页
-  const goCheckin = (id) => {
-    const task = tasks.find(t => t.id === id)
-    if (task && task.name.trim()) {
-      router.push(`/checkin/${id}`)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMsg('');
+    if (isLogin) {
+      await signIn(email, password);
+      setMsg('登录成功！');
     } else {
-      alert(t.inputTip)
+      await signUp(email, password);
+      setMsg('注册成功，请查收邮箱激活账号！');
     }
-  }
+  };
 
-  // 删除任务
-  const deleteTask = (id) => {
-    setTasks(tasks.filter(t => t.id !== id))
-  }
+  if (loading) return <div className="flex items-center justify-center min-h-screen text-lg text-gray-700">加载中...</div>;
 
   return (
-    <main className="min-h-screen w-full max-w-md mx-auto flex flex-col items-center justify-center bg-gray-900 px-2 py-8">
-      {/* 右上角语言切换 */}
-      <div className="fixed top-4 right-4 z-20 flex gap-1 sm:gap-2">
-        <button
-          className={`px-2 py-1 rounded text-xs sm:text-base md:text-lg ${lang === 'zh' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}
-          onClick={() => setLang('zh')}
-          style={{minHeight: '32px', minWidth: '40px'}}
-        >中文</button>
-        <button
-          className={`px-2 py-1 rounded text-xs sm:text-base md:text-lg ${lang === 'en' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}
-          onClick={() => setLang('en')}
-          style={{minHeight: '32px', minWidth: '40px'}}
-        >EN</button>
-      </div>
-      <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white tracking-wider font-lobster w-full text-center mb-4 sm:mb-8 leading-tight">NJ の Check-in</h1>
-      <div className="w-full flex flex-col gap-2 sm:gap-4">
-        {tasks.map((task, idx) => (
-          <div key={task.id} className="flex gap-2 sm:gap-4 items-center">
+    <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300">
+      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-xs flex flex-col items-center">
+        <div className="text-3xl font-bold mb-6 text-blue-700">NJ Check-in</div>
+        {user ? (
+          <>
+            <div className="mb-4 text-lg text-gray-800">你好，{user.email}</div>
+            <button
+              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition mb-2"
+              onClick={signOut}
+            >退出登录</button>
+            <div className="text-gray-500 text-sm">登录后可进行打卡和数据云同步</div>
+          </>
+        ) : (
+          <form className="w-full flex flex-col gap-3" onSubmit={handleSubmit}>
             <input
-              className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none text-sm sm:text-base md:text-lg"
-              placeholder={`${t.task}${idx + 1}`}
-              value={task.name}
-              onChange={e => updateTask(task.id, e.target.value)}
-              style={{minHeight: '40px'}}
+              type="email"
+              placeholder="邮箱"
+              className="border rounded px-3 py-2 w-full"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+            />
+            <input
+              type="password"
+              placeholder="密码"
+              className="border rounded px-3 py-2 w-full"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
             />
             <button
-              className="w-full max-w-[100px] bg-blue-600 text-white px-2 py-2 sm:px-4 sm:py-3 rounded flex items-center justify-center text-sm sm:text-base md:text-lg whitespace-nowrap"
-              onClick={() => goCheckin(task.id)}
-              style={{minHeight: '40px', minWidth: '56px'}}
-            >{t.enter}</button>
-            {idx >= 2 && (
-              <button
-                className="ml-1 sm:ml-2 flex items-center justify-center text-lg sm:text-xl leading-none hover:bg-red-700 rounded max-w-[40px]"
-                onClick={() => deleteTask(task.id)}
-                title="删除任务"
-                style={{padding: 0, minHeight: '40px', minWidth: '40px'}}
-              >{t.delete}</button>
-            )}
-          </div>
-        ))}
-        <button 
-          className="w-full mt-4 sm:mt-6 bg-white text-gray-900 px-3 py-2 sm:px-4 sm:py-3 rounded text-base sm:text-lg md:text-xl" 
-          onClick={addTask}
-          style={{minHeight: '40px'}}
-        >{t.addTask}</button>
+              type="submit"
+              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+            >{isLogin ? '登录' : '注册'}</button>
+            <button
+              type="button"
+              className="w-full text-blue-600 underline text-sm mt-1"
+              onClick={() => setIsLogin(!isLogin)}
+            >{isLogin ? '没有账号？注册' : '已有账号？登录'}</button>
+            {error && <div className="text-red-500 text-sm mt-1">{error}</div>}
+            {msg && <div className="text-green-600 text-sm mt-1">{msg}</div>}
+          </form>
+        )}
       </div>
     </main>
-  )
-} 
+  );
+}
