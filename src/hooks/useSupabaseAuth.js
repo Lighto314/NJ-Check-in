@@ -15,31 +15,29 @@ export function useSupabaseAuth() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // 暂时跳过 Supabase 认证检查，直接显示登录页面
-    console.log('Skipping initial auth check for now');
-    setLoading(false);
-    
-    // 注释掉 Supabase 认证检查，避免连接问题
-    /*
-    // 获取当前用户
+    // 设置一个超时，防止无限加载
+    const timeout = setTimeout(() => {
+      console.log('Auth check timeout, setting loading to false');
+      setLoading(false);
+    }, 3000);
+
+    // 尝试获取当前用户，但不阻塞页面显示
     const getUser = async () => {
       try {
         console.log('Checking user session...');
         const { data: { user }, error } = await supabase.auth.getUser();
         console.log('Current user:', user, 'Error:', error);
-        setUser(user);
+        if (user) {
+          setUser(user);
+        }
         setLoading(false);
+        clearTimeout(timeout);
       } catch (error) {
         console.error('Error getting user:', error);
         setLoading(false);
+        clearTimeout(timeout);
       }
     };
-
-    // 设置一个超时，防止无限加载
-    const timeout = setTimeout(() => {
-      console.log('Auth check timeout, setting loading to false');
-      setLoading(false);
-    }, 5000);
 
     getUser();
 
@@ -57,7 +55,6 @@ export function useSupabaseAuth() {
       subscription.unsubscribe();
       clearTimeout(timeout);
     };
-    */
   }, []);
 
   const signUp = async (username, password) => {
