@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Calendar from '../../../components/月历'
 import TaskList from '../../../components/任务列表'
+import 礼炮动画 from '../../../components/礼炮动画'
 import useLocalStorage from '../../../hooks/useLocalStorage'
 import { getMonthDays, formatDate, getToday } from '../../../utils/日期工具'
 
@@ -45,6 +46,8 @@ export default function CheckinPage() {
   const [taskName, setTaskName] = useState('')
   // 语言切换
   const [lang, setLang] = useState('zh')
+  // 礼炮动画状态
+  const [showConfetti, setShowConfetti] = useState(false)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -181,6 +184,9 @@ export default function CheckinPage() {
                 newCounts[checkinDate] = (newCounts[checkinDate] || 0) + 1
                 setData({ ...data, checkins: newCheckins, checkinCounts: newCounts })
                 setShowCheckinModal(false)
+                // 触发礼炮动画
+                setShowConfetti(true)
+                setTimeout(() => setShowConfetti(false), 1000)
               }}
             >{t.checkin}</button>
             <button className="text-black text-sm sm:text-base" onClick={() => setShowCheckinModal(false)}>{t.cancel}</button>
@@ -196,6 +202,8 @@ export default function CheckinPage() {
           onClose={() => setSelectedDate(null)}
         />
       )}
+      {/* 礼炮动画 */}
+      <礼炮动画 isVisible={showConfetti} />
     </main>
   )
 } 
