@@ -26,7 +26,7 @@ export default function Home() {
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300">
-      <div className="bg-blue-50 rounded-xl shadow-lg p-8 w-full max-w-xs flex flex-col items-center">
+      <div className="bg-white/30 backdrop-blur-sm rounded-xl shadow-lg p-8 w-full max-w-xs flex flex-col items-center">
         <div className="text-3xl font-bold mb-6 text-blue-700">NJ Check-in</div>
         {user ? (
           <>
