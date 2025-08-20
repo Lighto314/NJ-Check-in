@@ -13,7 +13,6 @@ const LANGS = {
     enter: '进入签到',
     inputTip: '请输入任务名称',
     delete: '❌',
-    login: '登录',
   },
   en: {
     headline: 'NJ Check-in',
@@ -22,11 +21,11 @@ const LANGS = {
     enter: 'Check In',
     inputTip: 'Please enter task name',
     delete: '❌',
-    login: 'Login',
   }
 }
 
 export default function HomePage() {
+  // 初始化时从 localStorage 读取任务
   const [tasks, setTasks] = useState(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -87,14 +86,9 @@ export default function HomePage() {
     setTasks(tasks.filter(t => t.id !== id))
   }
 
-  // 去登录页
-  const goToLogin = () => {
-    router.push('/login')
-  }
-
   return (
     <main className="min-h-screen w-full max-w-md mx-auto flex flex-col items-center justify-center bg-gray-900 px-2 py-8">
-      {/* 右上角语言切换和登录 */}
+      {/* 右上角语言切换 */}
       <div className="fixed top-4 right-4 z-20 flex gap-1 sm:gap-2">
         <button
           className={`px-2 py-1 rounded text-xs sm:text-base md:text-lg ${lang === 'zh' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}
@@ -106,11 +100,6 @@ export default function HomePage() {
           onClick={() => setLang('en')}
           style={{minHeight: '32px', minWidth: '40px'}}
         >EN</button>
-        <button
-          className="px-2 py-1 rounded text-xs sm:text-base md:text-lg bg-green-600 text-white"
-          onClick={goToLogin}
-          style={{minHeight: '32px', minWidth: '40px'}}
-        >{t.login}</button>
       </div>
 
       <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white tracking-wider font-lobster w-full text-center mb-4 sm:mb-8 leading-tight">NJ の Check-in</h1>
