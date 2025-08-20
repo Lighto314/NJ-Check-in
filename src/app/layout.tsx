@@ -1,26 +1,22 @@
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
 import './globals.css'
-import type { Metadata, Viewport } from 'next'
-import { ReactNode } from 'react'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: '签到打卡小程序',
-  description: '简洁的月历签到与多任务打卡',
+  title: 'NJ Check-in',
+  description: '任务签到打卡App',
 }
 
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-}
-
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="zh-CN" className="dark">
-      <head>
-        <link rel="manifest" href="/manifest.json" />
-      </head>
-      <body className="bg-gray-200 font-['Microsoft YaHei', 'Noto Sans SC'] min-h-screen">{children}</body>
+    <html lang="zh-CN">
+      <body className={inter.className}>{children}</body>
     </html>
   )
 }
