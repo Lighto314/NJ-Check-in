@@ -19,7 +19,9 @@ html, body {
 
 body {
   min-height: 100vh;
-  @apply bg-white text-black;
+  background-color: #2563eb; /* 蓝色，可根据需要调整 */
+  color: #fff;
+}
 }
 
 .dark body {
